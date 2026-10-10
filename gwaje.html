@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>항공교통관제절차 통합 과제 도우미</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary: #0f4c81;
+      --primary-hover: #0a355c;
+      --accent: #2563eb;
+      --accent-bg: #eff6ff;
+      --bg-page: #f8fafc;
+      --card-bg: #ffffff;
+      --text-main: #0f172a;
+      --text-sub: #475569;
+      --text-muted: #94a3b8;
+      --border: #e2e8f0;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans KR", sans-serif; }
+    body { background-color: var(--bg-page); color: var(--text-main); min-height: 100vh; }
+    .view-screen { display: none; }
+    .view-screen.active { display: block; }
+
+    /* 홈 메인 화면 */
+    .home-container { max-width: 860px; margin: 0 auto; padding: 60px 24px; }
+    .home-header { text-align: center; margin-bottom: 40px; }
+    .badge { display: inline-block; font-size: 12px; font-weight: 700; letter-spacing: 1.5px; color: var(--primary); background: #e0edfb; padding: 6px 14px; border-radius: 999px; margin-bottom: 14px; }
+    .home-header h1 { font-size: 32px; font-weight: 800; margin-bottom: 12px; }
+    .subtitle { font-size: 15px; color: var(--text-sub); }
+    .menu-grid { display: flex; flex-direction: column; gap: 16px; }
+    .menu-card { display: flex; align-items: center; background: var(--card-bg); border: 1px solid var(--border); border-radius: 16px; padding: 24px 28px; cursor: pointer; text-align: left; transition: all 0.2s ease; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.04); width: 100%; }
+    .menu-card:hover { transform: translateY(-2px); border-color: var(--accent); box-shadow: 0 10px 20px -3px rgba(15, 76, 129, 0.1); }
+    .icon-wrap { width: 52px; height: 52px; min-width: 52px; border-radius: 12px; background: var(--accent-bg); color: var(--primary); display: flex; align-items: center; justify-content: center; font-size: 22px; margin-right: 20px; }
+    .card-content h2 { font-size: 19px; font-weight: 700; margin-bottom: 6px; }
+    .card-content p { font-size: 14px; color: var(--text-sub); line-height: 1.5; }
+    .arrow-wrap { color: var(--text-muted); font-size: 18px; margin-left: 16px; }
+
+    /* 네비게이션 바 */
+    .navbar { display: flex; justify-content: space-between; align-items: center; background: #ffffff; border-bottom: 1px solid var(--border); padding: 14px 28px; position: sticky; top: 0; z-index: 100; }
+    .nav-left { display: flex; align-items: center; gap: 12px; }
+    .back-btn { background: none; border: none; color: var(--primary); font-weight: 700; font-size: 14px; cursor: pointer; display: flex; align-items: center; gap: 6px; padding: 6px 10px; border-radius: 6px; }
+    .back-btn:hover { background: #f1f5f9; }
+    .nav-divider { color: var(--border); }
+    .page-title { font-size: 16px; font-weight: 700; }
+
+    /* 서브화면 레이아웃 & 검색 */
+    .sub-container { max-width: 1100px; margin: 28px auto; padding: 0 20px 60px; }
+    .search-box-section { margin-bottom: 24px; }
+    .search-input-group { display: flex; gap: 10px; background: #ffffff; padding: 8px; border: 1px solid var(--border); border-radius: 12px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.03); }
+    .search-input-group input { flex: 1; border: none; outline: none; padding: 10px 16px; font-size: 15px; color: var(--text-main); }
+    .btn-search { background: var(--primary); color: #ffffff; border: none; border-radius: 8px; padding: 10px 24px; font-size: 15px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: background 0.2s ease; white-space: nowrap; }
+    .btn-search:hover { background: var(--primary-hover); }
+
+    /* 6대 문서 출처별 필터 탭 */
+    .filter-tabs { display: flex; gap: 8px; margin-top: 14px; flex-wrap: wrap; }
+    .filter-btn { background: #ffffff; border: 1px solid var(--border); color: var(--text-sub); padding: 8px 16px; border-radius: 20px; font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.15s ease; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 1px 2px rgba(0,0,0,0.02); }
+    .filter-btn:hover { background: #f1f5f9; border-color: #cbd5e1; }
+    .filter-btn.active { background: var(--primary); color: #ffffff; border-color: var(--primary); box-shadow: 0 2px 5px rgba(15, 76, 129, 0.25); }
+    .filter-count { font-size: 11px; padding: 2px 7px; border-radius: 10px; background: rgba(0, 0, 0, 0.08); font-weight: 700; }
+    .filter-btn.active .filter-count { background: rgba(255, 255, 255, 0.25); color: #ffffff; }
+
+    .results-section { background: #ffffff; border: 1px solid var(--border); border-radius: 16px; padding: 24px; }
+    .results-meta { font-size: 14px; color: var(--text-sub); margin-bottom: 18px; padding-bottom: 12px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+    .placeholder-box { text-align: center; padding: 50px 0; color: var(--text-muted); }
+    .highlight { background-color: #fef08a; padding: 1px 3px; border-radius: 3px; font-weight: 700; color: #854d0e; }
+
+    /* 용어 정의 4분할 */
+    .term-entry-container { border: 1px solid var(--border); border-radius: 14px; padding: 20px; margin-bottom: 24px; background: #ffffff; }
+    .entry-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #eef2f6; padding-bottom: 12px; margin-bottom: 16px; }
+    .title-wrap { display: flex; align-items: baseline; gap: 12px; }
+    .en-title { font-size: 19px; font-weight: 800; color: #0f172a; }
+    .kr-title { font-size: 15px; font-weight: 600; color: var(--primary); }
+    .quad-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+    @media (max-width: 768px) { .quad-grid { grid-template-columns: 1fr; } }
+    .quad-card { border: 1px solid #e2e8f0; border-radius: 10px; background: #fafbfc; display: flex; flex-direction: column; min-height: 140px; }
+    .quad-card-header { padding: 9px 12px; display: flex; justify-content: space-between; align-items: center; font-size: 12px; font-weight: 700; border-bottom: 1px solid #e2e8f0; }
+    .source-kr { background: #eff6ff; color: #1e40af; }
+    .source-annex { background: #ecfdf5; color: #065f46; }
+    .source-doc { background: #fefce8; color: #854d0e; }
+    .source-pcg { background: #faf5ff; color: #6b21a8; }
+    .lang-tag { font-size: 11px; opacity: 0.85; }
+    .quad-card-body { padding: 14px; flex: 1; font-size: 13.5px; line-height: 1.6; }
+    .def-text { color: #334155; white-space: pre-wrap; word-break: break-word; }
+    .empty-notice-box { display: flex; align-items: center; justify-content: center; height: 100%; min-height: 80px; }
+    .empty-notice { color: #94a3b8; font-size: 13px; font-style: italic; }
+
+    /* 조문 찾기 2분할 대조 */
+    .article-entry-container { border: 1px solid var(--border); border-radius: 14px; padding: 22px; margin-bottom: 24px; background: #ffffff; }
+    .article-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; padding-bottom: 12px; border-bottom: 2px solid #eef2f6; }
+    .badge-group { display: flex; align-items: center; gap: 8px; }
+    .article-num-badge { background: var(--primary); color: #fff; padding: 5px 14px; border-radius: 6px; font-weight: 800; font-size: 15px; }
+    .btn-action { background: #f1f5f9; border: 1px solid var(--border); padding: 6px 12px; border-radius: 6px; font-size: 12.5px; font-weight: 600; cursor: pointer; color: var(--text-sub); display: flex; align-items: center; gap: 6px; transition: background 0.15s; }
+    .btn-action:hover { background: #e2e8f0; color: var(--text-main); }
+    .dual-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; }
+    @media (max-width: 860px) { .dual-grid { grid-template-columns: 1fr; } }
+    .dual-card { border: 1px solid #e2e8f0; border-radius: 12px; background: #fafbfc; display: flex; flex-direction: column; min-height: 200px; }
+    .dual-card-header { padding: 12px 16px; font-size: 13px; font-weight: 700; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center; }
+    .dual-kr-header { background: #eff6ff; color: #1e40af; }
+    .dual-faa-header { background: #f1f5f9; color: #334155; }
+    .dual-card-body { padding: 18px 20px; flex: 1; font-size: 14px; line-height: 1.7; color: #334155; }
+    .article-title-text { font-size: 15px; font-weight: 700; margin-bottom: 10px; color: #0f172a; padding-bottom: 6px; border-bottom: 1px dashed #cbd5e1; }
+    .article-body-text { white-space: pre-wrap; word-break: break-word; font-size: 13.5px; color: #1e293b; }
+
+    /* 키워드 검색 결과 카드 */
+    .keyword-entry-card {
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      margin-bottom: 22px;
+      background: #ffffff;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+      overflow: hidden;
+      transition: all 0.2s ease;
+    }
+    .keyword-entry-card:hover {
+      box-shadow: 0 6px 14px rgba(15, 76, 129, 0.08);
+      border-color: #cbd5e1;
+    }
+
+    .card-theme-header {
+      padding: 12px 18px;
+      font-size: 13px;
+      font-weight: 700;
+      border-bottom: 1px solid #e2e8f0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .header-kr_proc   { background: #eff6ff; color: #1e40af; border-bottom-color: #bfdbfe; }
+    .header-kr_ats    { background: #f0fdfa; color: #0f766e; border-bottom-color: #99f6e4; }
+    .header-faa_7110  { background: #f1f5f9; color: #1e293b; border-bottom-color: #cbd5e1; }
+    .header-faa_pcg   { background: #faf5ff; color: #6b21a8; border-bottom-color: #e9d5ff; }
+    .header-icao_doc  { background: #fefce8; color: #854d0e; border-bottom-color: #fef08a; }
+    .header-icao_ats  { background: #ecfdf5; color: #065f46; border-bottom-color: #a7f3d0; }
+
+    .header-left { display: flex; align-items: center; gap: 10px; }
+    .source-title-text { font-size: 14px; font-weight: 800; letter-spacing: -0.2px; }
+    .header-tag-pill { font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 12px; background: rgba(0, 0, 0, 0.06); }
+    .header-right { display: flex; align-items: center; gap: 10px; }
+    .page-badge-pill { font-size: 12px; font-weight: 700; padding: 3px 9px; border-radius: 6px; background: #ffffff; border: 1px solid rgba(0, 0, 0, 0.1); color: #334155; }
+
+    .keyword-entry-body { padding: 18px 20px; }
+    .section-breadcrumb { font-size: 14.5px; font-weight: 700; color: #0f172a; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px dashed #e2e8f0; display: flex; align-items: center; gap: 6px; }
+    .snippet-quote-box { background: #f8fafc; border-left: 4px solid var(--accent); padding: 12px 16px; border-radius: 0 8px 8px 0; font-size: 13.5px; line-height: 1.7; color: #334155; margin-bottom: 12px; }
+    .btn-toggle-accordion { background: none; border: none; color: var(--accent); font-size: 12.5px; font-weight: 600; cursor: pointer; padding: 4px 0; display: inline-flex; align-items: center; gap: 6px; }
+    .btn-toggle-accordion:hover { text-decoration: underline; }
+    .full-text-viewer { background: #fafbfc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 16px; margin-top: 12px; font-size: 13px; line-height: 1.7; color: #334155; white-space: pre-wrap; word-break: break-word; max-height: 380px; overflow-y: auto; display: none; }
+    .full-text-viewer.open { display: block; }
+
+    /* =========================================================
+       우측 하단 맨 위로 이동 플로팅 버튼 (Scroll-to-Top)
+       ========================================================= */
+    .btn-scroll-top {
+      position: fixed;
+      bottom: 28px;
+      right: 28px;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: #ffffff;
+      border: none;
+      box-shadow: 0 4px 14px rgba(15, 76, 129, 0.35);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      cursor: pointer;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(12px);
+      transition: all 0.25s ease;
+      z-index: 999;
+    }
+    .btn-scroll-top:hover {
+      background: var(--primary-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 18px rgba(15, 76, 129, 0.45);
+    }
+    .btn-scroll-top.visible {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 화면 1: 메인 홈 -->
+  <div id="homeScreen" class="view-screen active">
+    <div class="home-container">
+      <header class="home-header">
+        <span class="badge">ATC STUDY ASSISTANT</span>
+        <h1>항공관제절차 과제 도우미</h1>
+        <p class="subtitle">대한민국 항공교통관제절차와 FAA / ICAO 6대 기준문서를 통합 대조합니다.</p>
+      </header>
+
+      <main class="menu-grid">
+        <button class="menu-card" onclick="switchView('definitionsScreen')">
+          <div class="icon-wrap"><i class="fa-solid fa-book-bookmark"></i></div>
+          <div class="card-content">
+            <h2>용어 정의</h2>
+            <p>항공교통관제절차와 Annex 11, Doc 4444, FAA PCG의 영문 정의를 4분할로 조회합니다.</p>
+          </div>
+          <div class="arrow-wrap"><i class="fa-solid fa-arrow-right"></i></div>
+        </button>
+
+        <button class="menu-card" onclick="switchView('articlesScreen')">
+          <div class="icon-wrap"><i class="fa-solid fa-scale-balanced"></i></div>
+          <div class="card-content">
+            <h2>조문 찾기</h2>
+            <p>조문 번호(예: 2-1-1, 3-7-2, 4-2-1)로 대한민국 관제절차와 FAA JO 7110.65를 좌우 2분할로 대조합니다.</p>
+          </div>
+          <div class="arrow-wrap"><i class="fa-solid fa-arrow-right"></i></div>
+        </button>
+
+        <button class="menu-card" onclick="switchView('keywordScreen')">
+          <div class="icon-wrap"><i class="fa-solid fa-magnifying-glass"></i></div>
+          <div class="card-content">
+            <h2>키워드로 찾기 (6대 문서 전체)</h2>
+            <p>관제용어 및 절차 키워드를 국내 2대 고시, FAA 2종, ICAO 2종 전체에서 출처별로 통합 검색합니다.</p>
+          </div>
+          <div class="arrow-wrap"><i class="fa-solid fa-arrow-right"></i></div>
+        </button>
+      </main>
+    </div>
+  </div>
+
+  <!-- 화면 2: 용어 정의 검색 (4분할) -->
+  <div id="definitionsScreen" class="view-screen">
+    <nav class="navbar">
+      <div class="nav-left">
+        <button class="back-btn" onclick="switchView('homeScreen')"><i class="fa-solid fa-chevron-left"></i> 홈으로</button>
+        <span class="nav-divider">|</span>
+        <span class="page-title">용어 정의 (4개 규정 4분할 대조)</span>
+      </div>
+    </nav>
+    <div class="sub-container">
+      <section class="search-box-section">
+        <div class="search-input-group">
+          <input type="text" id="termInput" placeholder="용어 입력 (예: Abeam, 항공지도, 가속-정지 가능거리, Clearance...)" autocomplete="off">
+          <button class="btn-search" onclick="runTermSearch()"><i class="fa-solid fa-magnifying-glass"></i> 검색</button>
+        </div>
+      </section>
+      <section class="results-section">
+        <div class="results-meta"><span id="termStatus">검색어를 입력하고 검색 버튼 또는 엔터를 눌러주세요.</span></div>
+        <div id="termResults"></div>
+      </section>
+    </div>
+  </div>
+
+  <!-- 화면 3: 조문 찾기 (2분할 대조) -->
+  <div id="articlesScreen" class="view-screen">
+    <nav class="navbar">
+      <div class="nav-left">
+        <button class="back-btn" onclick="switchView('homeScreen')"><i class="fa-solid fa-chevron-left"></i> 홈으로</button>
+        <span class="nav-divider">|</span>
+        <span class="page-title">조문 찾기 (한·미 관제규정 대조)</span>
+      </div>
+    </nav>
+    <div class="sub-container">
+      <section class="search-box-section">
+        <div class="search-input-group">
+          <input type="text" id="articleInput" placeholder="조문 번호 또는 제목 입력 (예: 2-1-1, 2-1-5, 3-7-2, 4-2-1...)" autocomplete="off">
+          <button class="btn-search" onclick="runArticleSearch()"><i class="fa-solid fa-magnifying-glass"></i> 검색</button>
+        </div>
+      </section>
+      <section class="results-section">
+        <div class="results-meta"><span id="articleStatus">조문 번호(예: 4-2-1) 또는 조문명을 입력하고 검색해 보세요.</span></div>
+        <div id="articleResults"></div>
+      </section>
+    </div>
+  </div>
+
+  <!-- 화면 4: 키워드로 찾기 (6대 문서 통합 검색) -->
+  <div id="keywordScreen" class="view-screen">
+    <nav class="navbar">
+      <div class="nav-left">
+        <button class="back-btn" onclick="switchView('homeScreen')"><i class="fa-solid fa-chevron-left"></i> 홈으로</button>
+        <span class="nav-divider">|</span>
+        <span class="page-title">키워드로 찾기 (6대 항공관제 기준문서 통합)</span>
+      </div>
+    </nav>
+    <div class="sub-container">
+      <section class="search-box-section">
+        <div class="search-input-group">
+          <input type="text" id="keywordInput" placeholder="관제용어, 절차 단어 입력 (예: Hold short, 착륙 허가, Wake turbulence, SID, 비행정보실...)" autocomplete="off">
+          <button class="btn-search" onclick="handleKeywordSearchBtn()"><i class="fa-solid fa-magnifying-glass"></i> 통합 검색</button>
+        </div>
+
+        <!-- 6개 출처별 필터 버튼 영역 -->
+        <div class="filter-tabs" id="corpusFilterTabs">
+          <button class="filter-btn active" data-source="all" onclick="selectCorpusTab('all', this)">
+            전체 문서 <span class="filter-count" id="count_all">0</span>
+          </button>
+          <button class="filter-btn" data-source="kr_proc" onclick="selectCorpusTab('kr_proc', this)">
+            관제절차 <span class="filter-count" id="count_kr_proc">0</span>
+          </button>
+          <button class="filter-btn" data-source="kr_ats" onclick="selectCorpusTab('kr_ats', this)">
+            항공교통업무기준 <span class="filter-count" id="count_kr_ats">0</span>
+          </button>
+          <button class="filter-btn" data-source="faa_7110" onclick="selectCorpusTab('faa_7110', this)">
+            FAA 7110.65 <span class="filter-count" id="count_faa_7110">0</span>
+          </button>
+          <button class="filter-btn" data-source="faa_pcg" onclick="selectCorpusTab('faa_pcg', this)">
+            FAA PCG <span class="filter-count" id="count_faa_pcg">0</span>
+          </button>
+          <button class="filter-btn" data-source="icao_doc4444" onclick="selectCorpusTab('icao_doc4444', this)">
+            ICAO Doc 4444 <span class="filter-count" id="count_icao_doc4444">0</span>
+          </button>
+          <button class="filter-btn" data-source="icao_annex11" onclick="selectCorpusTab('icao_annex11', this)">
+            ICAO Annex 11 <span class="filter-count" id="count_icao_annex11">0</span>
+          </button>
+        </div>
+      </section>
+
+      <section class="results-section">
+        <div class="results-meta"><span id="keywordStatus">검색어를 입력하면 6개 PDF 본문 전체에서 일치하는 단락을 탐색합니다.</span></div>
+        <div id="keywordResults">
+          <div class="placeholder-box">
+            <i class="fa-solid fa-book-open" style="font-size: 36px; margin-bottom: 12px; display:block;"></i>
+            원하는 관제용어나 절차 키워드를 검색해 보세요.
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <!-- 우측 하단 맨 위로 이동 플로팅 버튼 -->
+  <button id="scrollTopBtn" class="btn-scroll-top" onclick="scrollToTop()" title="맨 위로 이동">
+    <i class="fa-solid fa-arrow-up"></i>
+  </button>
+
+  <!-- 데이터 파일 로드 (캐시 무력화 버전 적용) -->
+  <script src="terms_data.js"></script>
+  <script src="articles_data.js?v=20261010_art"></script>
+  <script src="keyword_corpus.js?v=20261010_corp"></script>
+
+  <script>
+    let activeCorpusFilter = 'all';
+    let cachedMatchedList = [];
+
+    function switchView(screenId) {
+      document.querySelectorAll('.view-screen').forEach(el => el.classList.remove('active'));
+      document.getElementById(screenId).classList.add('active');
+      window.scrollTo(0, 0);
+      const focusMap = {
+        definitionsScreen: 'termInput',
+        articlesScreen: 'articleInput',
+        keywordScreen: 'keywordInput'
+      };
+      if (focusMap[screenId]) {
+        setTimeout(() => document.getElementById(focusMap[screenId])?.focus(), 50);
+      }
+    }
+
+    /* 맨 위로 부드럽게 스크롤 이동 */
+    function scrollToTop() {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    /* 스크롤 위치 감지: 200px 이상 내려갔을 때 버튼 표시 */
+    window.addEventListener('scroll', () => {
+      const btn = document.getElementById('scrollTopBtn');
+      if (!btn) return;
+      if (window.scrollY > 200) {
+        btn.classList.add('visible');
+      } else {
+        btn.classList.remove('visible');
+      }
+    });
+
+    function clean(str) {
+      return (str || '').toLowerCase().replace(/[\s\-_/·(),.]/g, '');
+    }
+
+    function escapeHtml(text) {
+      return (text || '').replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    }
+
+    function highlight(text, keyword) {
+      if (!text || !keyword) return escapeHtml(text || "");
+      const escaped = keyword.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      const regex = new RegExp(`(${escaped})`, 'gi');
+      return escapeHtml(text).replace(regex, '<mark class="highlight">$1</mark>');
+    }
+
+    /* 1. 용어 정의 검색 */
+    function runTermSearch() {
+      const raw = document.getElementById('termInput').value.trim();
+      const statusEl = document.getElementById('termStatus');
+      const container = document.getElementById('termResults');
+      if (!raw) return;
+      if (typeof termDatabase === 'undefined') { alert('terms_data.js 로드 실패'); return; }
+
+      const q = clean(raw);
+      const matched = termDatabase.filter(item => {
+        const d = item.definitions || {};
+        return clean(item.enName).includes(q) || clean(item.krName).includes(q) ||
+               clean(d.kr_proc).includes(q) || clean(d.annex11).includes(q) ||
+               clean(d.doc4444).includes(q) || clean(d.faa_pcg).includes(q);
+      });
+
+      statusEl.innerHTML = `<strong>'${escapeHtml(raw)}'</strong> 검색 결과: 총 <strong>${matched.length}</strong>건`;
+      if (matched.length === 0) {
+        container.innerHTML = '<div class="placeholder-box">일치하는 용어가 없습니다.</div>';
+        return;
+      }
+
+      container.innerHTML = matched.map(item => {
+        const d = item.definitions || {};
+        return `
+          <div class="term-entry-container">
+            <div class="entry-header">
+              <div class="title-wrap">
+                <h2 class="en-title">${highlight(item.enName, raw)}</h2>
+                <span class="kr-title">${highlight(item.krName || '', raw)}</span>
+              </div>
+            </div>
+            <div class="quad-grid">
+              <div class="quad-card"><div class="quad-card-header source-kr"><span>항공교통관제절차</span><span>한국어</span></div><div class="quad-card-body"><p class="def-text">${d.kr_proc ? highlight(d.kr_proc, raw) : '정보 없음'}</p></div></div>
+              <div class="quad-card"><div class="quad-card-header source-annex"><span>ICAO Annex 11</span><span>Chapter 1</span></div><div class="quad-card-body"><p class="def-text">${d.annex11 ? highlight(d.annex11, raw) : '정보 없음'}</p></div></div>
+              <div class="quad-card"><div class="quad-card-header source-doc"><span>ICAO Doc 4444</span><span>Chapter 1</span></div><div class="quad-card-body"><p class="def-text">${d.doc4444 ? highlight(d.doc4444, raw) : '정보 없음'}</p></div></div>
+              <div class="quad-card"><div class="quad-card-header source-pcg"><span>FAA PCG</span><span>Glossary</span></div><div class="quad-card-body"><p class="def-text">${d.faa_pcg ? highlight(d.faa_pcg, raw) : '정보 없음'}</p></div></div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    /* 2. 조문 찾기 */
+    function runArticleSearch() {
+      const raw = document.getElementById('articleInput').value.trim();
+      const statusEl = document.getElementById('articleStatus');
+      const container = document.getElementById('articleResults');
+      if (!raw) return;
+      if (typeof articleDatabase === 'undefined') { alert('articles_data.js 로드 실패'); return; }
+
+      const q = clean(raw);
+      const matched = articleDatabase.filter(a => clean(a.articleNo).includes(q) || clean(a.krTitle).includes(q) || clean(a.faaTitle).includes(q))
+                                     .sort((a,b) => clean(a.articleNo) === q ? -1 : 1);
+
+      statusEl.innerHTML = `<strong>'${escapeHtml(raw)}'</strong> 검색 결과: 총 <strong>${matched.length}</strong>개 조문`;
+      if (matched.length === 0) {
+        container.innerHTML = '<div class="placeholder-box">일치하는 조문이 없습니다.</div>';
+        return;
+      }
+
+      container.innerHTML = matched.map(a => `
+        <div class="article-entry-container">
+          <div class="article-header">
+            <div class="badge-group">
+              <span class="article-num-badge">제 ${highlight(a.articleNo, raw)} 조</span>
+              <span style="font-weight: 700;">${highlight(a.krTitle || a.faaTitle, raw)}</span>
+            </div>
+            <button class="btn-action" onclick="copyArticle('${a.articleNo}')"><i class="fa-regular fa-copy"></i> 원문 복사</button>
+          </div>
+          <div class="dual-grid">
+            <div class="dual-card">
+              <div class="dual-card-header dual-kr-header"><span>대한민국 관제절차</span><span>국토교통부</span></div>
+              <div class="dual-card-body">
+                <div class="article-title-text">${highlight(a.krTitle || '제목 없음', raw)}</div>
+                <div class="article-body-text">${a.krContent ? highlight(a.krContent, raw) : '<span class="empty-notice">내용 없음</span>'}</div>
+              </div>
+            </div>
+            <div class="dual-card">
+              <div class="dual-card-header dual-faa-header"><span>FAA Order JO 7110.65</span><span>FAA</span></div>
+              <div class="dual-card-body">
+                <div class="article-title-text">${highlight(a.faaTitle || 'No Title', raw)}</div>
+                <div class="article-body-text">${a.faaContent ? highlight(a.faaContent, raw) : '<span class="empty-notice">내용 없음</span>'}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function copyArticle(artNo) {
+      const item = articleDatabase.find(x => x.articleNo === artNo);
+      if (!item) return;
+      const copyText = `[항공교통관제절차 제 ${item.articleNo} 조 ${item.krTitle}]\n${item.krContent}\n\n[FAA JO 7110.65 ${item.articleNo}. ${item.faaTitle}]\n${item.faaContent}`;
+      navigator.clipboard.writeText(copyText).then(() => alert(`제 ${item.articleNo} 조 한·미 원문이 복사되었습니다.`));
+    }
+
+    /* 3. 키워드 검색 로직 */
+    function handleKeywordSearchBtn() {
+      runCoreSearch();
+    }
+
+    function selectCorpusTab(sourceId, btnElement) {
+      activeCorpusFilter = sourceId;
+
+      document.querySelectorAll('#corpusFilterTabs .filter-btn').forEach(btn => btn.classList.remove('active'));
+      if (btnElement) {
+        btnElement.classList.add('active');
+      } else {
+        const targetBtn = document.querySelector(`#corpusFilterTabs button[data-source="${sourceId}"]`);
+        if (targetBtn) targetBtn.classList.add('active');
+      }
+
+      const raw = document.getElementById('keywordInput').value.trim();
+      if (raw) {
+        if (cachedMatchedList.length === 0) {
+          runCoreSearch();
+        } else {
+          renderFilteredResults();
+        }
+      }
+    }
+
+    function runCoreSearch() {
+      const raw = document.getElementById('keywordInput').value.trim();
+      const statusEl = document.getElementById('keywordStatus');
+      const container = document.getElementById('keywordResults');
+
+      if (!raw) {
+        statusEl.textContent = '검색할 키워드를 입력해 주세요.';
+        container.innerHTML = '<div class="placeholder-box">검색어를 입력해 주세요.</div>';
+        return;
+      }
+
+      if (typeof keywordCorpus === 'undefined' || keywordCorpus.length === 0) {
+        alert('keyword_corpus.js 파일이 준비되지 않았습니다. extract_all_keywords.py를 먼저 실행해 주세요.');
+        return;
+      }
+
+      const q = raw.toLowerCase();
+
+      cachedMatchedList = keywordCorpus.filter(item => {
+        const txt = item.text || "";
+        const sec = item.section || "";
+        return txt.toLowerCase().includes(q) || sec.toLowerCase().includes(q);
+      });
+
+      updateTabCounts(cachedMatchedList);
+      renderFilteredResults();
+    }
+
+    function updateTabCounts(matched) {
+      const counts = {
+        all: matched.length,
+        kr_proc: 0,
+        kr_ats: 0,
+        faa_7110: 0,
+        faa_pcg: 0,
+        icao_doc4444: 0,
+        icao_annex11: 0
+      };
+
+      matched.forEach(item => {
+        if (counts.hasOwnProperty(item.sourceId)) {
+          counts[item.sourceId]++;
+        }
+      });
+
+      for (const [src, count] of Object.entries(counts)) {
+        const el = document.getElementById(`count_${src}`);
+        if (el) el.textContent = count;
+      }
+    }
+
+    function extractSnippet(content, keyword, snippetLen = 160) {
+      if (!content || !keyword) return "";
+      const idx = content.toLowerCase().indexOf(keyword.toLowerCase());
+      if (idx === -1) return "";
+      const start = Math.max(0, idx - 40);
+      const end = Math.min(content.length, idx + keyword.length + snippetLen);
+      let snippet = content.substring(start, end).replace(/\n+/g, ' ');
+      if (start > 0) snippet = '...' + snippet;
+      if (end < content.length) snippet = snippet + '...';
+      return snippet;
+    }
+
+    function getThemeHeaderClass(sourceId) {
+      switch(sourceId) {
+        case 'kr_proc': return 'header-kr_proc';
+        case 'kr_ats': return 'header-kr_ats';
+        case 'faa_7110': return 'header-faa_7110';
+        case 'faa_pcg': return 'header-faa_pcg';
+        case 'icao_doc4444': return 'header-icao_doc';
+        case 'icao_annex11': return 'header-icao_ats';
+        default: return 'header-kr_proc';
+      }
+    }
+
+    function getSourceIcon(sourceId) {
+      if (sourceId && sourceId.startsWith('kr')) return 'fa-solid fa-landmark';
+      if (sourceId && sourceId.startsWith('faa')) return 'fa-solid fa-plane-departure';
+      return 'fa-solid fa-earth-americas';
+    }
+
+    function renderFilteredResults() {
+      const raw = document.getElementById('keywordInput').value.trim();
+      const statusEl = document.getElementById('keywordStatus');
+      const container = document.getElementById('keywordResults');
+
+      if (!raw || cachedMatchedList.length === 0) {
+        statusEl.innerHTML = `<strong>'${escapeHtml(raw)}'</strong> 키워드가 포함된 본문이 없습니다.`;
+        container.innerHTML = '<div class="placeholder-box">일치하는 규정 본문을 찾지 못했습니다.</div>';
+        return;
+      }
+
+      const filtered = (activeCorpusFilter === 'all')
+        ? cachedMatchedList
+        : cachedMatchedList.filter(item => item.sourceId === activeCorpusFilter);
+
+      const sourceNameMap = {
+        all: '전체 문서',
+        kr_proc: '대한민국 항공교통관제절차',
+        kr_ats: '대한민국 항공교통업무기준',
+        faa_7110: 'FAA Order JO 7110.65',
+        faa_pcg: 'FAA Pilot/Controller Glossary',
+        icao_doc4444: 'ICAO Doc 4444 (PANS-ATM)',
+        icao_annex11: 'ICAO Annex 11 (ATS)'
+      };
+
+      statusEl.innerHTML = `<strong>'${escapeHtml(raw)}'</strong> 검색 결과 [${sourceNameMap[activeCorpusFilter]}]: 총 <strong>${filtered.length}</strong>개 페이지 발견 (전체 ${cachedMatchedList.length}개)`;
+
+      if (filtered.length === 0) {
+        container.innerHTML = `<div class="placeholder-box">선택하신 출처(<strong>${sourceNameMap[activeCorpusFilter]}</strong>)에는 해당 키워드가 포함된 내용이 없습니다. 상단에서 다른 출처 버튼을 선택해 보세요.</div>`;
+        return;
+      }
+
+      window.currentRenderedHits = filtered.slice(0, 80);
+
+      container.innerHTML = window.currentRenderedHits.map((hit, idx) => {
+        const themeHeaderClass = getThemeHeaderClass(hit.sourceId);
+        const iconClass = getSourceIcon(hit.sourceId);
+        const snippet = extractSnippet(hit.text, raw);
+
+        return `
+          <div class="keyword-entry-card">
+            <div class="card-theme-header ${themeHeaderClass}">
+              <div class="header-left">
+                <i class="${iconClass}"></i>
+                <span class="source-title-text">${hit.sourceName}</span>
+                <span class="header-tag-pill">${hit.tag}</span>
+              </div>
+              <div class="header-right">
+                <span class="page-badge-pill">p.${hit.page}</span>
+                <button class="btn-action" onclick="copyCitation(${idx})"><i class="fa-regular fa-copy"></i> 인용 복사</button>
+              </div>
+            </div>
+
+            <div class="keyword-entry-body">
+              ${hit.section ? `
+                <div class="section-breadcrumb">
+                  <i class="fa-regular fa-bookmark" style="color: var(--accent); font-size: 13px;"></i>
+                  ${highlight(hit.section, raw)}
+                </div>` : ''}
+
+              <div class="snippet-quote-box">${highlight(snippet, raw)}</div>
+
+              <button class="btn-toggle-accordion" onclick="toggleFullText(${idx})">
+                <i class="fa-solid fa-chevron-down" id="arrow_${idx}"></i> 해당 페이지 전체 본문 보기
+              </button>
+              <div id="fullText_${idx}" class="full-text-viewer">${highlight(hit.text, raw)}</div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function toggleFullText(idx) {
+      const el = document.getElementById(`fullText_${idx}`);
+      const arrow = document.getElementById(`arrow_${idx}`);
+      if (el) {
+        el.classList.toggle('open');
+        if (arrow) {
+          arrow.classList.toggle('fa-chevron-up');
+          arrow.classList.toggle('fa-chevron-down');
+        }
+      }
+    }
+
+    function copyCitation(idx) {
+      const item = window.currentRenderedHits[idx];
+      if (!item) return;
+      const copyText = `[출처: ${item.sourceName}, p.${item.page}]\n"${item.text.trim()}"`;
+      navigator.clipboard.writeText(copyText).then(() => {
+        alert(`[${item.sourceName} p.${item.page}] 본문 인용문이 클립보드에 복사되었습니다!`);
+      });
+    }
+
+    // 엔터키 이벤트 바인딩
+    document.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('termInput')?.addEventListener('keydown', e => { if (e.key === 'Enter') runTermSearch(); });
+      document.getElementById('articleInput')?.addEventListener('keydown', e => { if (e.key === 'Enter') runArticleSearch(); });
+      document.getElementById('keywordInput')?.addEventListener('keydown', e => { if (e.key === 'Enter') runCoreSearch(); });
+    });
+  </script>
+</body>
+</html>
