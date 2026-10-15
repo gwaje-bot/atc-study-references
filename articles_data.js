@@ -760,14 +760,14 @@ const articleDatabase = [
     "articleNo": "2-7-1",
     "krTitle": "최신 고도계수정치(Current Settings)",
     "faaTitle": "CURRENT SETTINGS",
-    "krContent": " 가. 최신의 고도계수정치는 직접 계기를 판독하거나 기상대로부터 받는다.
+    "krContent": ` 가. 최신의 고도계수정치는 직접 계기를 판독하거나 기상대로부터 받는다.
       참고 : FAAO 7210.3 2장 10절, Wind/Altimeter Information
   나. [군적용] : 조종사가 헥토파스칼 단위의 고도계수정치 요구 시, 가까운 기상대에 
 헥토파스칼 단위의 고도계수정치를 요청한다. 
       참고 : 3-9-1 출발 정보
              3-10-1 도착 정보
-             4-7-10 접근 정보",
-    "faaContent": "a. Current altimeter settings must be obtained from direct-reading instruments or directly from weather 
+             4-7-10 접근 정보`,
+    "faaContent": `a. Current altimeter settings must be obtained from direct-reading instruments or directly from weather 
 reporting stations. 
 REFERENCE− 
 FAA Order JO 7210.3, Chapter 2, Section 10, Wind/Altimeter Information. 
@@ -777,7 +777,7 @@ c. USAF/USA. Use the term “Estimated Altimeter” for altimeter settings repor
 REFERENCE− 
 FAA Order JO 7110.65, Para 3−9−1, Departure Information. 
 FAA Order JO 7110.65, Para 3−10−1, Landing Information. 
-FAA Order JO 7110.65, Para 4−7−10, Approach Information. "
+FAA Order JO 7110.65, Para 4−7−10, Approach Information. `
   },
   {
     "articleNo": "2-7-2",
