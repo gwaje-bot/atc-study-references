@@ -760,16 +760,32 @@ const articleDatabase = [
     "articleNo": "2-7-1",
     "krTitle": "최신 고도계수정치(Current Settings)",
     "faaTitle": "CURRENT SETTINGS",
-    "krContent": "가. 터미널(Terminal) : 관제비행장 또는 기상보고소에서 측정한 최신 고도계수정치를 발부하여야 한다.\n\n나. ENROUTE : 항공기가 통과하게 될 항공로상의 보고소에서 측정한 최신 고도계수정치를 발부하여야 한다.\n\n다. 항공기가 전이고도(14,000피트) 미만으로 비행하거나, 전이고도 미만으로 강하허가를 발부할 때에는 기상보고소에서 관측된 최신 고도계수정치를 발부하여야 한다.\n    관제용어 : ALTIMETER (세팅값).\n    예 : \"Altimeter three zero zero two.\"",
-    "faaContent": "a. TERMINAL: Issue current altimeter settings obtained from direct-reading instruments or received directly from weather reporting stations.\n\nb. ENROUTE: Issue current altimeter settings obtained from direct-reading instruments or output displays, or received directly from weather reporting stations, to aircraft entering your area and at such other times as necessary to ensure appropriate vertical separation.\n\nPHRASEOLOGY-\nALTIMETER (setting).\nEXAMPLE-\n\"Altimeter three zero zero two.\""
+    "krContent": " 가. 최신의 고도계수정치는 직접 계기를 판독하거나 기상대로부터 받는다.
+      참고 : FAAO 7210.3 2장 10절, Wind/Altimeter Information
+  나. [군적용] : 조종사가 헥토파스칼 단위의 고도계수정치 요구 시, 가까운 기상대에 
+헥토파스칼 단위의 고도계수정치를 요청한다. 
+      참고 : 3-9-1 출발 정보
+             3-10-1 도착 정보
+             4-7-10 접근 정보",
+    "faaContent": "a. Current altimeter settings must be obtained from direct-reading instruments or directly from weather 
+reporting stations. 
+REFERENCE− 
+FAA Order JO 7210.3, Chapter 2, Section 10, Wind/Altimeter Information. 
+b. If a pilot requests the altimeter setting in millibars, ask the nearest weather reporting station for the 
+equivalent millibar setting. 
+c. USAF/USA. Use the term “Estimated Altimeter” for altimeter settings reported or received as estimated. 
+REFERENCE− 
+FAA Order JO 7110.65, Para 3−9−1, Departure Information. 
+FAA Order JO 7110.65, Para 3−10−1, Landing Information. 
+FAA Order JO 7110.65, Para 4−7−10, Approach Information. "
   },
   {
     "articleNo": "2-7-2",
-    "krTitle": "최저이용가능 비행고도 미만에서의 고도계수정치 발부(Altimeter Setting Issuance Below Lowest Usable FL)",
+    "krTitle": "전이고도 미만에서의 고도계수정치 발부(Altimeter Setting Issuance Below Lowest Usable FL)",
     "faaTitle": "ALTIMETER SETTING ISSUANCE BELOW LOWEST USABLE FL",
-    "krContent": `가. 터미널(TERMINAL) : 항공기 출발지 또는 목적공항이 아닌 다른 곳의 고도계수정치를 발부 시 그 출처를 식별하여야 한다.
+    "krContent": `가. 터미널(TERMINAL) : 항공기 출발지 또는 목적공항이 아닌 다른 곳의 고도계수정치를 발부 시 그 출처를 밝혀준다.
 
-나. 항로(EN ROUTE) : 모든 고도계수정치 발부 시 그 출처를 식별하여야 한다.
+나. 항로(EN ROUTE) : 모든 고도계수정치 발부 시, 그 출처를 밝혀준다.
 
 [관제용어]
 - (고도계수정치가 관측된 지 1시간 이내인 경우)
