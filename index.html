@@ -119,34 +119,43 @@
     .placeholder-box { text-align: center; padding: 50px 0; color: var(--text-muted); }
     .highlight { background-color: var(--highlight-bg); color: var(--highlight-text); padding: 1px 4px; border-radius: 3px; font-weight: 700; }
 
-    /* 용어 정의 4분할 */
+    /* 용어 정의 반응형 다분할 그리드 */
     .term-entry-container { border: 1px solid var(--border); border-radius: 14px; padding: 20px; margin-bottom: 24px; background: var(--card-bg); }
     .entry-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--border); padding-bottom: 12px; margin-bottom: 16px; }
-    .title-wrap { display: flex; align-items: baseline; gap: 12px; }
+    .title-wrap { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; }
     .en-title { font-size: 19px; font-weight: 800; color: var(--text-main); }
     .kr-title { font-size: 15px; font-weight: 600; color: var(--primary); }
-    .quad-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
-    @media (max-width: 768px) { .quad-grid { grid-template-columns: 1fr; } }
+    
+    /* 5개 카드가 자연스럽게 정렬되는 반응형 다분할 그리드 */
+    .quad-grid { 
+      display: grid; 
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); 
+      gap: 14px; 
+    }
     .quad-card { border: 1px solid var(--border); border-radius: 10px; background: var(--viewer-bg); display: flex; flex-direction: column; min-height: 140px; }
     .quad-card-header { padding: 9px 12px; display: flex; justify-content: space-between; align-items: center; font-size: 12px; font-weight: 700; border-bottom: 1px solid var(--border); }
-    .source-kr    { background: #eff6ff; color: #1e40af; }
-    .source-annex { background: #ecfdf5; color: #065f46; }
-    .source-doc   { background: #fefce8; color: #854d0e; }
-    .source-pcg   { background: #faf5ff; color: #6b21a8; }
-    [data-theme='dark'] .source-kr    { background: #172554; color: #93c5fd; }
-    [data-theme='dark'] .source-annex { background: #022c22; color: #6ee7b7; }
-    [data-theme='dark'] .source-doc   { background: #422006; color: #fde047; }
-    [data-theme='dark'] .source-pcg   { background: #3b0764; color: #d8b4fe; }
-    .lang-tag { font-size: 11px; opacity: 0.85; }
+    
+    /* 용어 정의 출처별 테마 헤더 (항공교통업무기준 포함) */
+    .source-kr      { background: #eff6ff; color: #1e40af; }
+    .source-kr-ats  { background: #f0fdfa; color: #0f766e; }
+    .source-annex   { background: #ecfdf5; color: #065f46; }
+    .source-doc     { background: #fefce8; color: #854d0e; }
+    .source-pcg     { background: #faf5ff; color: #6b21a8; }
+    
+    [data-theme='dark'] .source-kr      { background: #172554; color: #93c5fd; }
+    [data-theme='dark'] .source-kr-ats  { background: #042f2e; color: #5eead4; }
+    [data-theme='dark'] .source-annex   { background: #022c22; color: #6ee7b7; }
+    [data-theme='dark'] .source-doc     { background: #422006; color: #fde047; }
+    [data-theme='dark'] .source-pcg     { background: #3b0764; color: #d8b4fe; }
+
     .quad-card-body { padding: 14px; flex: 1; font-size: 13.5px; line-height: 1.6; }
     .def-text { color: var(--text-main); white-space: pre-wrap; word-break: break-word; }
-    .empty-notice-box { display: flex; align-items: center; justify-content: center; height: 100%; min-height: 80px; }
     .empty-notice { color: var(--text-muted); font-size: 13px; font-style: italic; }
 
     /* 조문 찾기 2분할 대조 */
     .article-entry-container { border: 1px solid var(--border); border-radius: 14px; padding: 22px; margin-bottom: 24px; background: var(--card-bg); }
-    .article-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; padding-bottom: 12px; border-bottom: 2px solid var(--border); }
-    .badge-group { display: flex; align-items: center; gap: 8px; }
+    .article-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; padding-bottom: 12px; border-bottom: 2px solid var(--border); flex-wrap: wrap; gap: 10px; }
+    .badge-group { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
     .article-num-badge { background: var(--primary); color: #fff; padding: 5px 14px; border-radius: 6px; font-weight: 800; font-size: 15px; }
     [data-theme='dark'] .article-num-badge { color: #0f172a; }
     .btn-action { background: var(--card-bg); border: 1px solid var(--border); padding: 6px 12px; border-radius: 6px; font-size: 12.5px; font-weight: 600; cursor: pointer; color: var(--text-sub); display: flex; align-items: center; gap: 6px; transition: background 0.15s; }
@@ -178,7 +187,7 @@
       border-color: var(--accent);
     }
 
-    /* 문서별 테마 헤더 (다크모드 전용 딥 톤 매핑) */
+    /* 문서별 테마 헤더 */
     .card-theme-header {
       padding: 12px 18px;
       font-size: 13px;
@@ -270,15 +279,15 @@
       <header class="home-header">
         <span class="badge">ATC STUDY ASSISTANT</span>
         <h1>항공관제절차 과제봇</h1>
-        <p class="subtitle">아무튼 과제를 도와줄 예정입니다.</p>
+        <p class="subtitle">대한민국 항공교통관제절차와 FAA / ICAO 6대 기준문서를 통합 대조합니다.</p>
       </header>
 
       <main class="menu-grid">
         <button class="menu-card" onclick="switchView('definitionsScreen')">
           <div class="icon-wrap"><i class="fa-solid fa-book-bookmark"></i></div>
           <div class="card-content">
-            <h2>용어 정의</h2>
-            <p>항공교통관제절차와 Annex 11, Doc 4444, FAA PCG의 영문 정의를 4분할로 조회합니다.</p>
+            <h2>용어 정의 (5대 기준문서 통합)</h2>
+            <p>관제절차, 항공교통업무기준, Annex 11, Doc 4444, FAA PCG의 정의를 한눈에 5분할 대조합니다.</p>
           </div>
           <div class="arrow-wrap"><i class="fa-solid fa-arrow-right"></i></div>
         </button>
@@ -287,7 +296,7 @@
           <div class="icon-wrap"><i class="fa-solid fa-scale-balanced"></i></div>
           <div class="card-content">
             <h2>조문 찾기</h2>
-            <p>조문 번호(예: 2-1-1, 3-7-2, 4-2-1)로 대한민국 관제절차와 FAA JO 7110.65를 좌우 2분할로 대조합니다.</p>
+            <p>조문 번호(예: 2-1-1, 2-7-1, 3-7-2, 4-2-1)로 대한민국 관제절차와 FAA JO 7110.65를 좌우 2분할로 대조합니다.</p>
           </div>
           <div class="arrow-wrap"><i class="fa-solid fa-arrow-right"></i></div>
         </button>
@@ -304,13 +313,13 @@
     </div>
   </div>
 
-  <!-- 화면 2: 용어 정의 검색 (4분할) -->
+  <!-- 화면 2: 용어 정의 검색 (5개 규정 5분할 대조) -->
   <div id="definitionsScreen" class="view-screen">
     <nav class="navbar">
       <div class="nav-left">
         <button class="back-btn" onclick="switchView('homeScreen')"><i class="fa-solid fa-chevron-left"></i> 홈으로</button>
         <span class="nav-divider">|</span>
-        <span class="page-title">용어 정의 (4개 규정 4분할 대조)</span>
+        <span class="page-title">용어 정의 (5대 기준문서 통합 대조)</span>
       </div>
       <button class="theme-toggle-btn" onclick="toggleTheme()">
         <i class="fa-solid fa-moon theme-icon"></i>
@@ -320,7 +329,7 @@
     <div class="sub-container">
       <section class="search-box-section">
         <div class="search-input-group">
-          <input type="text" id="termInput" placeholder="용어 입력 (예: Abeam, 항공지도, 가속-정지 가능거리, Clearance...)" autocomplete="off">
+          <input type="text" id="termInput" placeholder="용어 입력 (예: Abeam, 항공지도, 가속-정지 가능거리, Clearance, Holding...)" autocomplete="off">
           <button class="btn-search" onclick="runTermSearch()"><i class="fa-solid fa-magnifying-glass"></i> 검색</button>
         </div>
       </section>
@@ -347,7 +356,7 @@
     <div class="sub-container">
       <section class="search-box-section">
         <div class="search-input-group">
-          <input type="text" id="articleInput" placeholder="조문 번호 또는 제목 입력 (예: 2-1-1, 2-1-5, 3-7-2, 4-2-1...)" autocomplete="off">
+          <input type="text" id="articleInput" placeholder="조문 번호 또는 제목 입력 (예: 2-1-1, 2-7-1, 2-7-2, 3-7-2, 4-2-1...)" autocomplete="off">
           <button class="btn-search" onclick="runArticleSearch()"><i class="fa-solid fa-magnifying-glass"></i> 검색</button>
         </div>
       </section>
@@ -421,10 +430,10 @@
     <i class="fa-solid fa-arrow-up"></i>
   </button>
 
-  <!-- 데이터 파일 로드 (캐시 무력화 버전 적용) -->
-  <script src="terms_data.js"></script>
-  <script src="articles_data.js?v=20261010_art"></script>
-  <script src="keyword_corpus.js?v=20261010_corp"></script>
+  <!-- 데이터 파일 로드 (브라우저 캐시 무력화 파라미터 적용) -->
+  <script src="terms_data.js?v=20261015_terms"></script>
+  <script src="articles_data.js?v=20261015_art"></script>
+  <script src="keyword_corpus.js?v=20261015_corp"></script>
 
   <script>
     /* =========================================================
@@ -467,7 +476,6 @@
       });
     }
 
-    // 시스템 테마 변경 실시간 감지 (사용자가 수동 설정하지 않은 경우)
     window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
       if (!localStorage.getItem('theme')) {
         applyTheme(e.matches ? 'dark' : 'light');
@@ -511,7 +519,7 @@
     });
 
     function clean(str) {
-      return (str || '').toLowerCase().replace(/[\s\-_/·(),.]/g, '');
+      return (str || '').toLowerCase().replace(/[\s\-_/·(),.\[\]'\"]/g, '');
     }
 
     function escapeHtml(text) {
@@ -525,7 +533,9 @@
       return escapeHtml(text).replace(regex, '<mark class="highlight">$1</mark>');
     }
 
-    /* 1. 용어 정의 검색 */
+    /* =========================================================
+       1. 용어 정의 검색 (5대 규정 통합 렌더링)
+       ========================================================= */
     function runTermSearch() {
       const raw = document.getElementById('termInput').value.trim();
       const statusEl = document.getElementById('termStatus');
@@ -537,8 +547,9 @@
       const matched = termDatabase.filter(item => {
         const d = item.definitions || {};
         return clean(item.enName).includes(q) || clean(item.krName).includes(q) ||
-               clean(d.kr_proc).includes(q) || clean(d.annex11).includes(q) ||
-               clean(d.doc4444).includes(q) || clean(d.faa_pcg).includes(q);
+               clean(d.kr_proc).includes(q) || clean(d.kr_ats).includes(q) ||
+               clean(d.annex11).includes(q) || clean(d.doc4444).includes(q) || 
+               clean(d.faa_pcg).includes(q);
       });
 
       statusEl.innerHTML = `<strong>'${escapeHtml(raw)}'</strong> 검색 결과: 총 <strong>${matched.length}</strong>건`;
@@ -558,17 +569,40 @@
               </div>
             </div>
             <div class="quad-grid">
-              <div class="quad-card"><div class="quad-card-header source-kr"><span>항공교통관제절차</span><span>한국어</span></div><div class="quad-card-body"><p class="def-text">${d.kr_proc ? highlight(d.kr_proc, raw) : '정보 없음'}</p></div></div>
-              <div class="quad-card"><div class="quad-card-header source-annex"><span>ICAO Annex 11</span><span>Chapter 1</span></div><div class="quad-card-body"><p class="def-text">${d.annex11 ? highlight(d.annex11, raw) : '정보 없음'}</p></div></div>
-              <div class="quad-card"><div class="quad-card-header source-doc"><span>ICAO Doc 4444</span><span>Chapter 1</span></div><div class="quad-card-body"><p class="def-text">${d.doc4444 ? highlight(d.doc4444, raw) : '정보 없음'}</p></div></div>
-              <div class="quad-card"><div class="quad-card-header source-pcg"><span>FAA PCG</span><span>Glossary</span></div><div class="quad-card-body"><p class="def-text">${d.faa_pcg ? highlight(d.faa_pcg, raw) : '정보 없음'}</p></div></div>
+              <!-- 1. 관제절차 -->
+              <div class="quad-card">
+                <div class="quad-card-header source-kr"><span>항공교통관제절차</span><span>국토부 고시</span></div>
+                <div class="quad-card-body"><p class="def-text">${d.kr_proc ? highlight(d.kr_proc, raw) : '<span class="empty-notice">정의 없음</span>'}</p></div>
+              </div>
+              <!-- 2. 항공교통업무기준 -->
+              <div class="quad-card">
+                <div class="quad-card-header source-kr-ats"><span>항공교통업무기준</span><span>국토부 고시 제2조</span></div>
+                <div class="quad-card-body"><p class="def-text">${d.kr_ats ? highlight(d.kr_ats, raw) : '<span class="empty-notice">정의 없음</span>'}</p></div>
+              </div>
+              <!-- 3. ICAO Annex 11 -->
+              <div class="quad-card">
+                <div class="quad-card-header source-annex"><span>ICAO Annex 11</span><span>Chapter 1</span></div>
+                <div class="quad-card-body"><p class="def-text">${d.annex11 ? highlight(d.annex11, raw) : '<span class="empty-notice">정의 없음</span>'}</p></div>
+              </div>
+              <!-- 4. ICAO Doc 4444 -->
+              <div class="quad-card">
+                <div class="quad-card-header source-doc"><span>ICAO Doc 4444</span><span>Chapter 1</span></div>
+                <div class="quad-card-body"><p class="def-text">${d.doc4444 ? highlight(d.doc4444, raw) : '<span class="empty-notice">정의 없음</span>'}</p></div>
+              </div>
+              <!-- 5. FAA PCG -->
+              <div class="quad-card">
+                <div class="quad-card-header source-pcg"><span>FAA PCG</span><span>Glossary</span></div>
+                <div class="quad-card-body"><p class="def-text">${d.faa_pcg ? highlight(d.faa_pcg, raw) : '<span class="empty-notice">정의 없음</span>'}</p></div>
+              </div>
             </div>
           </div>
         `;
       }).join('');
     }
 
-    /* 2. 조문 찾기 */
+    /* =========================================================
+       2. 조문 찾기 (한·미 관제규정 대조)
+       ========================================================= */
     function runArticleSearch() {
       const raw = document.getElementById('articleInput').value.trim();
       const statusEl = document.getElementById('articleStatus');
@@ -622,7 +656,9 @@
       navigator.clipboard.writeText(copyText).then(() => alert(`제 ${item.articleNo} 조 한·미 원문이 복사되었습니다.`));
     }
 
-    /* 3. 키워드 검색 로직 */
+    /* =========================================================
+       3. 키워드 검색 (6대 문서 통합 코퍼스 탐색)
+       ========================================================= */
     function handleKeywordSearchBtn() {
       runCoreSearch();
     }
@@ -660,7 +696,7 @@
       }
 
       if (typeof keywordCorpus === 'undefined' || keywordCorpus.length === 0) {
-        alert('keyword_corpus.js 파일이 준비되지 않았습니다. extract_all_keywords.py를 먼저 실행해 주세요.');
+        alert('keyword_corpus.js 파일이 준비되지 않았습니다.');
         return;
       }
 
@@ -822,7 +858,7 @@
       });
     }
 
-    // 엔터키 이벤트 바인딩
+    // 엔터키 검색 이벤트
     document.addEventListener('DOMContentLoaded', () => {
       document.getElementById('termInput')?.addEventListener('keydown', e => { if (e.key === 'Enter') runTermSearch(); });
       document.getElementById('articleInput')?.addEventListener('keydown', e => { if (e.key === 'Enter') runArticleSearch(); });
