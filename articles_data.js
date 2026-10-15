@@ -765,11 +765,81 @@ const articleDatabase = [
   },
   {
     "articleNo": "2-7-2",
-    "krTitle": "전이고도 미만에서의 고도계수정치 발부(Altimeter Setting Issuance Below Lowest Usable FL)",
+    "krTitle": "최저이용가능 비행고도 미만에서의 고도계수정치 발부(Altimeter Setting Issuance Below Lowest Usable FL)",
     "faaTitle": "ALTIMETER SETTING ISSUANCE BELOW LOWEST USABLE FL",
-    "krContent": "가. 조종사에게 전이고도(14,000피트) 미만의 고도로 강하허가를 발부할 때에는 다음 각 호에 따라 고도계수정치를 발부하여야 한다.\n    1) 터미널(Terminal) : 도착공항의 최신 고도계수정치.\n    2) ENROUTE : 도착공항 또는 비행경로 상에서 항공기가 위치한 지점으로부터 가장 가까운 기상보고소의 최신 고도계수정치.\n\n나. 전이고도 미만에서 비행 중인 항공기가 다른 관제구역 또는 인접 관제시설로 진입할 때 관할 구역 내의 최신 고도계수정치를 발부하여야 한다.\n\n다. 고도계수정치가 29.92 inches Hg 미만일 때 최저사용가능 비행인가고도(Lowest Usable FL)는 규정된 고도계수정치 보정표에 따라 변경 배정하여야 한다.",
-    "faaContent": "a. TERMINAL: When issuing a descent clearance to an aircraft operating above the lowest usable flight level, advise the aircraft of the appropriate altimeter setting:\n1. If destination airport is within your terminal area, issue the destination altimeter setting.\n2. If destination is not within your terminal area, issue the altimeter setting of the airport nearest the point where the aircraft will descend below the lowest usable flight level.\n\nb. ENROUTE: When issuing a descent clearance to an aircraft operating above the lowest usable flight level, advise the aircraft of the appropriate altimeter setting for the airport nearest the point where the aircraft will descend below the lowest usable flight level."
-  },  {
+    "krContent": `가. 터미널(TERMINAL) : 항공기 출발지 또는 목적공항이 아닌 다른 곳의 고도계수정치를 발부 시 그 출처를 식별하여야 한다.
+
+나. 항로(EN ROUTE) : 모든 고도계수정치 발부 시 그 출처를 식별하여야 한다.
+
+[관제용어]
+- (고도계수정치가 관측된 지 1시간 이내인 경우)
+  THE (기지명) ALTIMETER (수치).
+- (고도계수정치가 관측된 지 1시간을 초과한 경우)
+  THE (기지명) ALTIMETER (수치) MORE THAN ONE HOUR OLD.
+
+다. 다음과 같이 고도계수정치를 발부하여야 한다.
+   1) 항공로 비행 항공기가 관할구역 내에서 비행중일 때, 당해 항공기의 비행로를 따라 가장 가까운 기상관측소(reporting station)의 고도계수정치를 적어도 1회 발부한다.
+         주기 : 항공안전법 시행규칙 제165조(기압고도계의 수정)
+                ① “전이고도 미만의 고도로 비행하는 경우에는 비행로를 따라 185킬로미터 (100해리) 이내에 있는 항공교통관제기관으로부터 통보받은 QNH로 수정
+                ② 185킬로미터(100해리) 이내에 항공교통관제기관이 없는 경우에는 비행정보 업무 담당기관 등으로부터 받은 최신 QNH로 수정
+                ③ 전이고도 이상의 고도로 비행하는 경우에는 표준기압치(1,013.2 헥토파스칼)로 수정
+      2) 터미널(Terminal) : 모든 출발 항공기에게 고도계수정치를 발부한다. 조종사가 특별히 요구하지 않는 한, 서면상 생략을 요구한 국지 
+항공기 조종사 또는 정기 항공기에게는 고도계수정치를 발부할 필요는 없다.
+         참고 : 3-9-1 출발 정보
+      3) 터미널(Terminal) : 최초 교신시 또는 교신 후, 가능한 신속하게 도착 항공기에게 고도계수정치를 발부한다. 만약 항공기가 관할권을 
+가지고 있는 접근관제소에 의하여 공항으로 레이더 유도되었거나 혹은 접근순서가 배정(sequenced)되었다면 관제탑은 고도계 수정치 발부를 생략할 수 도 있다.
+         참고 : 4-7-10 접근정보
+                5-10-2 접근정보
+      4) ENROUTE : 접근관제시설이 없는 공항인 경우, 도착하는 항공기가 목적공항으로부터 약 50마일 지점에 접근하고 있을 때, 목적공항의 고도계 수정치를 발부한다.
+      5) 첫 교신 시 제공된 고도계수정치에 추가하여, 기상보고서의 비고란에 “기압이 급격히 떨어짐”을 포함하고 있을 때, 비정밀계기접근을 수행하는 항공기에게 가능한 자주 변경된 고도계수정치를 발부한다.
+
+ 라. 도착하는 항공기의 조종사가 고도계수정치를 다른 시설로부터 받아야 하는 경우, 당해 시설에서 고도계수정치를 얻도록 조종사에게 지시한다.
+      주기 : 도착지에서의 고도계수정치는 수정치 발부지역 또는 다른 지역에 관계  
+없이 계기접근절차가 수행되는 공항의 수정치이다.
+
+  마. 전이고도 미만으로 강하를 허가할 시, 조종사에게 전이고도 미만으로 강하하는 지점에서 가장 가까운 기상대의 고도계수정치를 조언한다.
+  
+바. 기압계의 압력이 31.00 Inch Hg 보다 큰 경우, 다음과 같이 고도계수정치를 발부한다.
+      1) ENROUTE/ARRIVALS : 최종접근구역(final approach segment)에 도착할 때까지 31.00 Inchs Hg를 맞출 것을 조언한다.
+      2) DEPARTURE : 강제(mandatory)/통과(cross)고도 혹은 1,500피트 AGL 중 더 낮은 고도에 도달할 때까지, 31.00 inches Hg에 맞추도록 조언한다.
+      관제용어 : ALTIMETER, THREE ONE TWO FIVE, SET THREE ONE ZERO 
+           ZERO UNTIL REACHING THE FINAL APPROACH FIX. 
+                  또는
+                  ALTIMETER, THREE ONE ONE ZERO, SET THREE ONE ZERO
+          ZERO PRIOR TO REACHING ONE THOUSAND THREE 
+          HUNDRED.
+      주기 1 : Mode C를 장착한 항공기는 관제사의 레이더 스코프 상에 배정된 고도와는 다르게 일정한 오차를 지닌 고도로 전시된다. 실제 고도계가 31.28 inches Hg일 때, Mode C가 장착된 항공기가 3,000피트로 고도 배정을 받은 경우, 3,300 피트로 고도가 나타난다. 이는 운영내규로 컴퓨터 시스템에 실제 대기압에 관계없이 고도계수정치 31.00인치의 입력을 허용하지 않는 경우에 발생할 수 있다.
+      주기 2 : 31.00inches Hg 이상의 대기압을 정확히 측정할 수 없는 공항에서 대기압은 “Missing” 또는 “In excess of 31.00 inches of Hg”로 
+보고되며, 동 공항에 항공기의 입․출항은 시계비행(VFR) 기상상태로 제한된다.
+      참고 : AIM 7-2-2 절차
+             3-10-1 도착 정보`,
+    "faaContent": `a. TERMINAL. Identify the source of an altimeter setting when issued for a location other than the aircraft's departure or destination airport.
+
+b. EN ROUTE. Identify the source of all altimeter settings when issued.
+
+PHRASEOLOGY-
+(If the altimeter is one hour old or less),
+THE (facility name) ALTIMETER (setting).
+or
+(If the altimeter is more than one hour old),
+THE (facility name) ALTIMETER (setting) MORE THAN ONE HOUR OLD.
+
+c. Issue the altimeter setting:
+1. To en route aircraft at least one time while operating in your area of jurisdiction. Issue the setting for the nearest reporting station along the aircraft's route of flight:
+   NOTE- 14 CFR Section 91.121(a)(1) requires that the pilot set his/her altimeter to the setting of a station along his/her route of flight within 100 miles of the aircraft if one is available. However, issuance of the setting of an adjacent station during periods that a steep gradient exists will serve to inform the pilot of the difference between the setting he/she is using and the pressure in the local area and better enable him/her to choose a more advantageous setting within the limitations of 14 CFR.
+2. TERMINAL. To all departures. Unless specifically requested by the pilot, the altimeter setting need not be issued to local aircraft operators who have requested this omission in writing or to scheduled air carriers.
+3. TERMINAL. To arriving aircraft on initial contact or as soon as possible thereafter. The tower may omit the altimeter if the aircraft is sequenced or vectored to the airport by the approach control having jurisdiction at that facility.
+4. EN ROUTE. For the destination airport to arriving aircraft, approximately 50 miles from the destination, if an approach control facility does not serve the airport.
+5. In addition to the altimeter setting provided on initial contact, issue changes in altimeter setting to aircraft executing a nonprecision instrument approach as frequently as practical when the official weather report includes the remarks "pressure falling rapidly."
+
+d. If the altimeter setting must be obtained by the pilot of an arriving aircraft from another source, instruct the pilot to obtain the altimeter setting from that source.
+   NOTE- The destination altimeter setting, whether from a local or remote source, is the setting upon which the instrument approach is predicated. Approach charts for many locations specify the source of altimeter settings as non-FAA facilities, such as UNICOMs.
+
+e. When issuing clearance to descend below the lowest usable flight level, advise the pilot of the altimeter setting of the weather reporting station nearest the point the aircraft will descend below that flight level. Local directives may delegate this responsibility to an alternate sector when Optimized Profile Descents (OPD) commence in sectors consisting entirely of Class A airspace.
+
+f. Department of Defense (DoD) aircraft that are authorized to operate in restricted areas, MOAs, and ATC assigned airspace areas on "single altimeter settings" (CFR Exemption 2861A), must be issued altimeter settings in accordance with standard procedures while the aircraft are en route to and from the restricted areas.`
+  },
+  {
     "articleNo": "2-7-3",
     "krTitle": "",
     "krContent": "",
